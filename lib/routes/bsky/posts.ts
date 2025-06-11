@@ -1,17 +1,15 @@
 import { Route, ViewType } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
 
 import cache from '@/utils/cache';
 import { parseDate } from '@/utils/parse-date';
 import { resolveHandle, getProfile, getAuthorFeed } from './utils';
 import { art } from '@/utils/render';
 import path from 'node:path';
-import querystring from 'querystring';
+import querystring from 'node:querystring';
 
 export const route: Route = {
     path: '/profile/:handle/:routeParams?',
-    categories: ['social-media', 'popular'],
+    categories: ['social-media'],
     view: ViewType.SocialMedia,
     example: '/bsky/profile/bsky.app',
     parameters: {
@@ -85,5 +83,6 @@ async function handler(ctx) {
         icon: profile.avatar,
         logo: profile.avatar,
         item: items,
+        allowEmpty: true,
     };
 }

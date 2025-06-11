@@ -86,6 +86,12 @@ export type Config = {
         promptTitle: string;
         promptDescription: string;
     };
+    follow: {
+        ownerUserId?: string;
+        description?: string;
+        price?: number;
+        userLimit?: number;
+    };
 
     // Route-specific Configurations
     bilibili: {
@@ -158,6 +164,10 @@ export type Config = {
     game4399: {
         cookie?: string;
     };
+    gelbooru: {
+        apiKey?: string;
+        userId?: string;
+    };
     github: {
         access_token?: string;
     };
@@ -194,6 +204,9 @@ export type Config = {
     javdb: {
         session?: string;
     };
+    jumeili: {
+        cookie?: string;
+    };
     keylol: {
         cookie?: string;
     };
@@ -211,6 +224,13 @@ export type Config = {
     malaysiakini: {
         email?: string;
         password?: string;
+        refreshToken?: string;
+    };
+    mangadex: {
+        username?: string;
+        password?: string;
+        clientId?: string;
+        clientSecret?: string;
         refreshToken?: string;
     };
     manhuagui: {
@@ -232,6 +252,9 @@ export type Config = {
         instance?: string;
         token?: string;
     };
+    misskey: {
+        accessToken?: string;
+    };
     mox: {
         cookie: string;
     };
@@ -251,6 +274,9 @@ export type Config = {
     };
     notion: {
         key?: string;
+    };
+    patreon: {
+        sessionId?: string;
     };
     pianyuan: {
         cookie?: string;
@@ -276,6 +302,7 @@ export type Config = {
     };
     saraba1st: {
         cookie?: string;
+        host?: string;
     };
     sehuatang: {
         cookie?: string;
@@ -327,6 +354,7 @@ export type Config = {
         authenticationSecret?: string[];
         phoneOrEmail?: string[];
         authToken?: string[];
+        thirdPartyApi?: string;
     };
     uestc: {
         bbsCookie?: string;
@@ -347,6 +375,9 @@ export type Config = {
     xiaoyuzhou: {
         device_id?: string;
         refresh_token?: string;
+    };
+    xiaohongshu: {
+        cookie?: string;
     };
     ximalaya: {
         token?: string;
@@ -377,6 +408,9 @@ export type Config = {
     zsxq: {
         accessToken?: string;
     };
+    smzdm: {
+        cookie?: string;
+    };
 };
 
 const value: Config | Record<string, any> = {};
@@ -391,7 +425,7 @@ const toBoolean = (value: string | undefined, defaultValue: boolean) => {
     }
 };
 
-const toInt = (value: string | undefined, defaultValue: number) => (value === undefined ? defaultValue : Number.parseInt(value));
+const toInt = (value: string | undefined, defaultValue?: number) => (value === undefined ? defaultValue : Number.parseInt(value));
 
 const calculateValue = () => {
     const bilibili_cookies: Record<string, string | undefined> = {};
@@ -422,7 +456,7 @@ const calculateValue = () => {
     const _value = {
         // app config
         disallowRobot: toBoolean(envs.DISALLOW_ROBOT, false),
-        enableCluster: envs.ENABLE_CLUSTER,
+        enableCluster: toBoolean(envs.ENABLE_CLUSTER, false),
         isPackage: !!envs.IS_PACKAGE,
         nodeName: envs.NODE_NAME,
         puppeteerWSEndpoint: envs.PUPPETEER_WS_ENDPOINT,
@@ -503,6 +537,12 @@ const calculateValue = () => {
             promptDescription: envs.OPENAI_PROMPT || 'Please summarize the following article and reply with markdown format.',
             promptTitle: envs.OPENAI_PROMPT_TITLE || 'Please translate the following title into Simplified Chinese and reply only translated text.',
         },
+        follow: {
+            ownerUserId: envs.FOLLOW_OWNER_USER_ID,
+            description: envs.FOLLOW_DESCRIPTION,
+            price: toInt(envs.FOLLOW_PRICE),
+            userLimit: toInt(envs.FOLLOW_USER_LIMIT),
+        },
 
         // Route-specific Configurations
         bilibili: {
@@ -575,6 +615,10 @@ const calculateValue = () => {
         game4399: {
             cookie: envs.GAME_4399,
         },
+        gelbooru: {
+            apiKey: envs.GELBOORU_API_KEY,
+            userId: envs.GELBOORU_USER_ID,
+        },
         github: {
             access_token: envs.GITHUB_ACCESS_TOKEN,
         },
@@ -588,7 +632,6 @@ const calculateValue = () => {
             cookies: envs.GUOZAOKE_COOKIES,
         },
         hefeng: {
-            // weather
             key: envs.HEFENG_KEY,
         },
         infzm: {
@@ -612,6 +655,9 @@ const calculateValue = () => {
         javdb: {
             session: envs.JAVDB_SESSION,
         },
+        jumeili: {
+            cookie: envs.JUMEILI_COOKIE,
+        },
         keylol: {
             cookie: envs.KEYLOL_COOKIE,
         },
@@ -630,6 +676,13 @@ const calculateValue = () => {
             email: envs.MALAYSIAKINI_EMAIL,
             password: envs.MALAYSIAKINI_PASSWORD,
             refreshToken: envs.MALAYSIAKINI_REFRESHTOKEN,
+        },
+        mangadex: {
+            username: envs.MANGADEX_USERNAME, // required when refresh-token is not set
+            password: envs.MANGADEX_PASSWORD, // required when refresh-token is not set
+            clientId: envs.MANGADEX_CLIENT_ID,
+            clientSecret: envs.MANGADEX_CLIENT_SECRET,
+            refreshToken: envs.MANGADEX_REFRESH_TOKEN,
         },
         manhuagui: {
             cookie: envs.MHGUI_COOKIE,
@@ -650,6 +703,9 @@ const calculateValue = () => {
             instance: envs.MINIFLUX_INSTANCE || 'https://reader.miniflux.app',
             token: envs.MINIFLUX_TOKEN || '',
         },
+        misskey: {
+            accessToken: envs.MISSKEY_ACCESS_TOKEN,
+        },
         mox: {
             cookie: envs.MOX_COOKIE,
         },
@@ -669,6 +725,9 @@ const calculateValue = () => {
         },
         notion: {
             key: envs.NOTION_TOKEN,
+        },
+        patreon: {
+            sessionId: envs.PATREON_SESSION_ID,
         },
         pianyuan: {
             cookie: envs.PIANYUAN_COOKIE,
@@ -694,6 +753,7 @@ const calculateValue = () => {
         },
         saraba1st: {
             cookie: envs.SARABA1ST_COOKIE,
+            host: envs.SARABA1ST_HOST || 'https://stage1st.com',
         },
         sehuatang: {
             cookie: envs.SEHUATANG_COOKIE,
@@ -745,6 +805,7 @@ const calculateValue = () => {
             authenticationSecret: envs.TWITTER_AUTHENTICATION_SECRET?.split(','),
             phoneOrEmail: envs.TWITTER_PHONE_OR_EMAIL?.split(','),
             authToken: envs.TWITTER_AUTH_TOKEN?.split(','),
+            thirdPartyApi: envs.TWITTER_THIRD_PARTY_API,
         },
         uestc: {
             bbsCookie: envs.UESTC_BBS_COOKIE,
@@ -765,6 +826,9 @@ const calculateValue = () => {
         xiaoyuzhou: {
             device_id: envs.XIAOYUZHOU_ID,
             refresh_token: envs.XIAOYUZHOU_TOKEN,
+        },
+        xiaohongshu: {
+            cookie: envs.XIAOHONGSHU_COOKIE,
         },
         ximalaya: {
             token: envs.XIMALAYA_TOKEN,
@@ -794,6 +858,9 @@ const calculateValue = () => {
         },
         zsxq: {
             accessToken: envs.ZSXQ_ACCESS_TOKEN,
+        },
+        smzdm: {
+            cookie: envs.SMZDM_COOKIE,
         },
     };
 
